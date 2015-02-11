@@ -15,6 +15,16 @@ struct vec4 {
         .v = [o.x(), o.y(), o.z(), o.w()]
     }*/
 
+    static vec4 createQuaternion(float angle, vec4 axis) {
+        vec4 ret
+        float scale = sin(angle / 2.0f);
+        ret.v[0] = axis.x() * scale;
+        ret.v[1] = axis.y() * scale;
+        ret.v[2] = axis.z() * scale;
+        ret.v[3] = cos(angle / 2.0f);
+        return ret
+    }
+
     float get(int i) return .v[i]
     void set(int i, float val) .v[i] = val
     float x() return .v[0]
@@ -22,12 +32,12 @@ struct vec4 {
     float z() return .v[2]
     float w() return .v[3]
 
-    float dot(vec4 o) return .v[0] * o.v[0] + .v[1] * o.v[1] + .v[2] * o.v[2] + .v[3] * o.v[3]
-    vec4 add(vec4 o) return vec4(.v[0] + o.v[0], .v[1] + o.v[1], .v[2] + o.v[2], .v[3] + o.v[3]);
-    vec4 sub(vec4 o) return vec4(.v[0] - o.v[0], .v[1] - o.v[1], .v[2] - o.v[2], .v[3] - o.v[3]);
-    vec4 mul(float f) return vec4(.v[0] * f, .v[1] * f, .v[2] * f, .v[3] * f);
-    vec4 div(float f) return vec4(.v[0] / f, .v[1] / f, .v[2] / f, .v[3] / f);
-    float lensq() return .v[0] * .v[0] + .v[1] * .v[1] + .v[2] * .v[2] + .v[3] * .v[3]
+    float dot(vec4 o) return .x() * o.x() + .y() * o.y() + .z() * o.z() + .w() * o.w()
+    vec4 add(vec4 o) return vec4(.x() + o.x(), .y() + o.y(), .z() + o.z(), .w() + o.w());
+    vec4 sub(vec4 o) return vec4(.x() - o.x(), .y() - o.y(), .z() - o.z(), .w() - o.w());
+    vec4 mul(float f) return vec4(.x() * f, .y() * f, .z() * f, .w() * f);
+    vec4 div(float f) return vec4(.x() / f, .y() / f, .z() / f, .w() / f);
+    float lensq() return .x() * .x() + .y() * .y() + .z() * .z() + .w() * .w()
     float len() return sqrt(.lensq())
     vec4 normalized() return .div(.len())
 
@@ -51,12 +61,75 @@ struct vec4 {
         return .sub(r)
     }
 
+    vec4 conjugate() {
+        return vec4(-.x(), -.y(), -.z(), .w())
+    }
+
+    vec4 inverse() {
+        float inv_norm = 1.0f / .lensq()
+        return vec4(-.x() * inv_norm, -.y() * inv_norm, -.z() * inv_norm, .w() * inv_norm)
+    }
+
+    vec4 real() {
+        return vec4(0, 0, 0, .w())
+    }
+
+    vec4 imaginary() {
+        return vec4(.x(), .y(), .z(), 0)
+    }
+
+    vec4 quaternion_rotate(float angle, vec4 axis) {
+    }
+
+    // quaternion multiply
+    vec4 qmul(vec4 o) {
+        return vec4(.w() * o.x() + .x() * o.w() + .y() * o.z() - .z() - o.y(),
+                    .w() * o.y() + .y() * o.w() + .z() * o.x() - .x() - o.z(),
+                    .w() * o.z() + .z() * o.w() + .x() * o.y() - .y() - o.x(),
+                    .w() * o.w() - .x() * o.x() - .y() * o.y() - .z() - o.z())
+    }
+
+    mat4 toMatrix() {
+        float ww = .w() * .w()
+        float wx2 = 2.0f * .w() * .x()
+        float wy2 = 2.0f * .w() * .y()
+        float wz2 = 2.0f * .w() * .z()
+        float xx = .x() * .x()
+        float xy2 = 2.0f * .x() * .y()
+        float xz2 = 2.0f * .y() * .z()
+        float yy = .y() * .y()
+        float yz2 = 2.0f * .y() * .z()
+        float zz = .z() * .z()
+
+        mat4 ret
+        ret.xx(ww + xx - yy - zz)
+        ret.xy(xy2 + wz2)
+        ret.xz(xz2 - wy2)
+        ret.xw(0.0f)
+
+        ret.yx(xy2 - wz2)
+        ret.yy(ww - xx + yy - zz)
+        ret.yz(yz2 + wx2)
+        ret.yw(0.0f)
+
+        ret.zx(xz2 + wy2)
+        ret.zy(yz2 - wx2)
+        ret.zz(ww - xx - yy + zz)
+        ret.zw(0.0f)
+
+        ret.wx(0.0f)
+        ret.wy(0.0f)
+        ret.wz(0.0f)
+        ret.ww(1.0f)
+        return ret
+    }
+
     float^ ptr() {
         return .v.ptr
     }
 
     void print() {
-        printf("%f %f %f %f\n", .v[0], .v[1], .v[2], .v[3])
+        printf("%f %f %f %f\n", .x(), .y(), .z(), .w())
     }
 }
 
@@ -85,6 +158,40 @@ struct mat4 {
         .v[14] = 0
         .v[15] = 1
     }
+
+    float xx() return .v[0]
+    float xy() return .v[4]
+    float xz() return .v[8]
+    float xw() return .v[12]
+    float yx() return .v[1]
+    float yy() return .v[5]
+    float yz() return .v[9]
+    float yw() return .v[13]
+    float zx() return .v[2]
+    float zy() return .v[6]
+    float zz() return .v[10]
+    float zw() return .v[14]
+    float wx() return .v[3]
+    float wy() return .v[7]
+    float wz() return .v[11]
+    float ww() {return .v[15]}
+
+    void xx(float v) .v[0] = v
+    void xy(float v) .v[4] = v
+    void xz(float v) .v[8] = v
+    void xw(float v) .v[12] = v
+    void yx(float v) .v[1] = v
+    void yy(float v) .v[5] = v
+    void yz(float v) .v[9] = v
+    void yw(float v) .v[13] = v
+    void zx(float v) .v[2] = v
+    void zy(float v) .v[6] = v
+    void zz(float v) .v[10] = v
+    void zw(float v) .v[14] = v
+    void wx(float v) .v[3] = v
+    void wy(float v) .v[7] = v
+    void wz(float v) .v[11] = v
+    void ww(float v) .v[15] = v
 
     float^ ptr() return .v.ptr
 

@@ -78,7 +78,7 @@ void init() {
     i = loadTGA(new StringFile(pack "res/lose.tga"))
     lose = new GLTexture(i)
 
-    //loadScene(new StringFile(pack "mouse.scn"))
+    loadScene(new StringFile(pack "mouse.scn"))
 
     musicInit()
 
@@ -106,7 +106,7 @@ void input() {
     static bool Z_DOWN
     static bool Q_DOWN
 
-    if(keystate[SDLK_a]) man.scale = 1.5
+    if(keystate[SDLK_c]) man.scale = 1.2
     if(keystate[SDLK_ESCAPE]) {
         running = false
     }
@@ -142,7 +142,7 @@ void input() {
     } else if(whereAreWe == LOSE) {
         if(keystate[SDLK_SPACE]) {
             man.reset()
-            (Entity.removeAll())
+            Entity.removeAll()
             whereAreWe = TITLE
         }
     } else if(whereAreWe == WIN) {
@@ -181,9 +181,9 @@ void update(float dt) {
             whereAreWe = LOSE
         }
 
-        updateEntities(dt)
+        //updateEntities(dt)
 
-        Entity first = (Entity.getFirst())
+        Entity first = Entity.getFirst()
         if(!first) {
             if(!cookie) {
                 cookie = new Cookie()

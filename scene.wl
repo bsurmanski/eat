@@ -18,11 +18,10 @@ struct SceneHeader {
 
 struct SceneEntity {
     uint16 pid
-    char[2] padding1
+    char[6] padding1
     float[3] position
     float[3] scale
     float[4] rotation
-    char[4] padding2
     char[16] name
 }
 
@@ -44,7 +43,8 @@ Scene loadScene(InputInterface file) {
         file.read(&ent, SceneEntity.sizeof, 1)
         if(!strcmp("Mouse".ptr, ent.name.ptr)) {
             Mouse m = new Mouse()
-            m.position = vec4(ent.position[0], ent.position[1], ent.position[2], 0)
+            m.position = vec4(ent.position[0], ent.position[1], ent.position[2], 1)
+            m.qrotation = vec4(ent.rotation[0], ent.rotation[1], ent.rotation[2], ent.rotation[3])
             Entity.add(m)
         } else if(!strcmp("Camera".ptr, ent.name.ptr)) {
             //printf("Camera FOUND\n")

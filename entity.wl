@@ -5,6 +5,7 @@ import "drawDevice.wl"
 
 class Entity {
     vec4 position
+    vec4 qrotation
     float rotation
 
     static Entity first
@@ -53,9 +54,11 @@ class Entity {
         float scale = .getScale()
 
         mat4 mat = mat4()
+        mat4 qmat = .qrotation.toMatrix()
         vec4 axis = vec4(0, 1, 0, 0)
-        mat = mat.rotate(.rotation, axis)
+        //mat = mat.rotate(.rotation, axis)
         mat = mat.scale(scale, scale, scale)
+        mat = qmat.mul(mat)
         mat = mat.translate(.position)
         mat = view.mul(mat)
 
