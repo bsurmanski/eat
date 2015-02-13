@@ -27,6 +27,8 @@ class Cliffbar : Entity {
     float nummies() return 0.1
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         if(!mesh) {
             Mesh m = loadMdl(new StringFile(pack "res/cliffbar.mdl"))
             .mesh = new GLMesh(m)
@@ -49,13 +51,11 @@ class Cliffbar : Entity {
             .dead = true
         }
         .rotation += 0.1
+        .qrotation = vec4.createQuaternion(.rotation, vec4(0,1,0,0))
         .position.v[1] = (sin(.rotation) / 2.0f + 0.5) / 10.0f
     }
 
-    Box3 getHitbox() {
-        vec4 dim = vec4(0.5, 0.5, 0.5, 0)
-        return Box3(.position, dim)
-    }
+    vec4 getExtents() return vec4(0.5, 0.5, 0.5, 0)
 
     GLMesh getMesh() return mesh
     GLTexture getTexture() return texture

@@ -24,6 +24,8 @@ class Shroom : Entity {
     bool isDead() return .dead
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         if(!mesh) {
             Mesh m = loadMdl(new StringFile(pack "res/mushroom.mdl"))
             .mesh = new GLMesh(m)
@@ -52,10 +54,7 @@ class Shroom : Entity {
 
     float nummies() return 0.01
 
-    Box3 getHitbox() {
-        vec4 dim = vec4(3.3, 0.98, 0.86, 0)
-        return Box3(.position, dim)
-    }
+    vec4 getExtents() return vec4(3.3, 0.98, 0.86, 0)
 
     GLMesh getMesh() return .mesh
     GLTexture getTexture() return .texture

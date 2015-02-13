@@ -24,6 +24,8 @@ class Carrot : Entity {
     bool isDead() return .dead
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         if(!mesh) {
             Mesh m = loadMdl(new StringFile(pack "res/carrot.mdl"))
             .mesh = new GLMesh(m)
@@ -55,10 +57,7 @@ class Carrot : Entity {
     GLMesh getMesh() return mesh
     GLTexture getTexture() return texture
 
-    Box3 getHitbox() {
-        vec4 dim = vec4(1.0, 0.98, 0.86, 0)
-        return Box3(.position, dim)
-    }
+    vec4 getExtents() return vec4(1.0, 0.98, 0.86, 0)
 }
 
 void initCarrots() {

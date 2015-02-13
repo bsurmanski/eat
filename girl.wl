@@ -32,6 +32,8 @@ class GirlDuck : Entity {
     bool isDead() return .dead
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         .scale = 1.5f
         .spin = 1
         if(!mesh) {
@@ -112,13 +114,10 @@ class GirlDuck : Entity {
         } else {
             .state = 0
         }
+        .qrotation = vec4.createQuaternion(.rotation, vec4(0,1,0,0))
     }
 
-    Box3 getHitbox() {
-        vec4 dim = vec4(1.5, 2.5, 1.5, 0)
-        dim.mul(.scale)
-        return Box3(.position, dim)
-    }
+    vec4 getExtents() return vec4(1.5, 2.5, 1.5, 0)
 
     GLMesh getMesh() return mesh
     GLTexture getTexture() return texture

@@ -31,6 +31,8 @@ class DuckMan : Entity {
     bool isDead() return .dead
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         instance = this
 
         Image img = loadTGA(new StringFile(pack "res/pillduck.tga"))
@@ -53,9 +55,13 @@ class DuckMan : Entity {
         .position = vec4(0, 0, 0, 1)
     }
 
-    Box3 getHitbox() {
+    Box3 getHitbox() { 
+        return Box3(.position, .getExtents())
+    }
+
+    vec4 getExtents() {
         vec4 dim = vec4(1.8, 2.5, 1.8, 0)
-        return Box3(.position, dim.mul(.scale))
+        return dim.mul(.scale)
     }
 
     void eat(Entity e) {

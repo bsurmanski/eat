@@ -24,6 +24,8 @@ class Mouse : Entity {
     bool dead
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         .spin = 1
         if(!mesh) {
             Mesh m = loadMdl(new StringFile(pack "res/mouse.mdl"))
@@ -63,7 +65,7 @@ class Mouse : Entity {
         }
 
         .rotation += 0.15 * .spin
-        vec4 dv = vec4(0, 0, -0.10, 0)
+        vec4 dv = vec4(0, 0, 0.10, 0)
 
         mat4 matrix = mat4()
         matrix = matrix.rotate(.rotation, vec4(0, 1, 0, 0))
@@ -79,13 +81,12 @@ class Mouse : Entity {
             }
         }
 
+        .qrotation = vec4.createQuaternion(.rotation, vec4(0,1,0,0))
+
         .position = .position.add(dv)
     }
 
-    Box3 getHitbox() {
-        vec4 dim = vec4(1.0, 1, 1.0, 0)
-        return Box3(.position, dim)
-    }
+    vec4 getExtents() return vec4(1, 1, 1, 0)
 
     GLMesh getMesh() return mesh
     GLTexture getTexture() return texture

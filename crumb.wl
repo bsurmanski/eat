@@ -26,6 +26,8 @@ class Crumb : Entity {
     float nummies() return 0.005
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         if(!mesh) {
             Mesh m = loadMdl(new StringFile(pack "res/crumb.mdl"))
             .mesh = new GLMesh(m)
@@ -51,10 +53,7 @@ class Crumb : Entity {
         .position.v[1] = (sin(.rotation) / 2.0f + 0.5) / 10.0f
     }
 
-    Box3 getHitbox() {
-        vec4 dim = vec4(0.2, 0.2, 0.2, 0)
-        return Box3(.position, dim)
-    }
+    vec4 getExtents() return vec4(0.2, 0.2, 0.2, 0)
 
     GLMesh getMesh() return mesh
     GLTexture getTexture() return texture

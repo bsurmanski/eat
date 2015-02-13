@@ -181,7 +181,7 @@ void update(float dt) {
             whereAreWe = LOSE
         }
 
-        //updateEntities(dt)
+        updateEntities(dt)
 
         Entity first = Entity.getFirst()
         if(!first) {

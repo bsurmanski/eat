@@ -23,6 +23,8 @@ class Cookie : Entity {
     bool areYouCookie() return true
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         if(!.mesh) {
             Mesh m = loadMdl(new StringFile(pack "res/cookie.mdl"))
             .mesh = new GLMesh(m)
@@ -49,9 +51,7 @@ class Cookie : Entity {
         }
     }
 
-    Box3 getHitbox() {
-        return Box3(.position, vec4(0.25, 0.25, 0.25, 0))
-    }
+    vec4 getExtents() return vec4(0.25, 0.25, 0.25, 0)
 
     void draw(mat4 view) {
         GLDrawDevice dev = GLDrawDevice.getInstance()

@@ -51,7 +51,7 @@ struct vec4 {
     }
 
     vec4 proj(vec4 o) {
-        float numer = .dot(o)
+        float numer = .dot(o) // length sq
         float denom = o.dot(o)
         return .mul(numer / denom)
     }
@@ -192,6 +192,11 @@ struct mat4 {
     void wy(float v) .v[7] = v
     void wz(float v) .v[11] = v
     void ww(float v) .v[15] = v
+
+    vec4 x() return vec4(.xx(), .xy(), .xz(), .xw())
+    vec4 y() return vec4(.yx(), .yy(), .yz(), .yw())
+    vec4 z() return vec4(.zx(), .zy(), .zz(), .zw())
+    vec4 w() return vec4(.wx(), .wy(), .wz(), .ww())
 
     float^ ptr() return .v.ptr
 

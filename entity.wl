@@ -17,6 +17,10 @@ class Entity {
     static Entity getFirst() return first
     bool isDead() return false
 
+    this() {
+        .qrotation = vec4(0,0,0,1)
+    }
+
     static void add(Entity e) {
         if(!first) {
             first = e
@@ -43,9 +47,17 @@ class Entity {
     GLMesh getMesh() return null
     GLTexture getTexture() return null
     float getScale() return 1.0f
+
+    vec4 getExtents() {
+        return vec4(1, 1, 1, 0)
+    }
+
     Box3 getHitbox() {
-        vec4 d = vec4(1, 1, 1, 0)
-        return Box3(.position, d)
+        return Box3(.position, .getExtents())
+    }
+
+    OBox3 getOHitbox() {
+        return OBox3(.position, .getExtents(), mat4())
     }
 
     void draw(mat4 view) {

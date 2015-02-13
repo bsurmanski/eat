@@ -29,6 +29,8 @@ class Grub : Entity {
     bool isDead() return .dead
 
     this() {
+        .qrotation = vec4(0,0,0,1)
+
         .timer = 5
         .scale = 0.5 + randomFloat()
         .spin = 1
@@ -89,12 +91,13 @@ class Grub : Entity {
         } else {
             .state = 0
         }
+        .qrotation = vec4.createQuaternion(.rotation, vec4(0,1,0,0))
     }
 
-    Box3 getHitbox() {
+    vec4 getExtents() {
         vec4 dim = vec4(0.45, 0.2, 0.45, 0)
-        dim.mul(.scale)
-        return Box3(.position, dim)
+        dim = dim.mul(.scale)
+        return dim
     }
 
     float getScale() return .scale
