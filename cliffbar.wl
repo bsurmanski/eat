@@ -45,7 +45,7 @@ class Cliffbar : Entity {
 
     void update(float dt) {
         DuckMan d = DuckMan.getInstance()
-        Box3 dhit = d.getHitbox()
+        OBox3 dhit = d.getHitbox()
         if(dhit.collides(.getHitbox()) and d.scale > 0.4) {
             d.eat(this)
             .dead = true

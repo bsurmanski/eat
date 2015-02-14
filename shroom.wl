@@ -42,12 +42,11 @@ class Shroom : Entity {
 
     void update(float dt) {
         DuckMan d = DuckMan.getInstance()
-        Box3 dhit = d.getHitbox()
+        OBox3 dhit = d.getHitbox()
         if(dhit.collides(.getHitbox())) {
             if(d.scale * 2.2 > 1.5)  {
                 d.eat(this)
                 .dead = true
-            } else {
             }
         }
     }

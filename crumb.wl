@@ -44,7 +44,7 @@ class Crumb : Entity {
 
     void update(float dt) {
         DuckMan d = DuckMan.getInstance()
-        Box3 dhit = d.getHitbox()
+        OBox3 dhit = d.getHitbox()
         if(dhit.collides(.getHitbox())) {
             d.eat(this)
             .dead = true

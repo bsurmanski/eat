@@ -52,8 +52,9 @@ class Entity {
         return vec4(1, 1, 1, 0)
     }
 
-    Box3 getHitbox() {
-        return Box3(.position, .getExtents())
+    OBox3 getHitbox() {
+        mat4 rot = .qrotation.toMatrix()
+        return OBox3(.position, .getExtents(), rot)
     }
 
     OBox3 getOHitbox() {
@@ -76,7 +77,8 @@ class Entity {
 
         dev.runMeshProgram(.getMesh(), .getTexture(), mat)
 
-        if(dev.drawHitbox) dev.drawBoundingBox(.getHitbox(), view)
+
+        if(dev.drawHitbox) dev.drawOBoundingBox(.getHitbox(), view)
     }
 }
 

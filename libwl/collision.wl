@@ -97,9 +97,7 @@ struct Box3 {
     void setDimension(float[3] d)
         .rad = d
 
-    vec4 getCenter() {
-        return vec4(.pos[0], .pos[1], .pos[2], 0)
-    }
+    vec4 getCenter() return vec4(.pos[0], .pos[1], .pos[2], 0)
 
     void setCenter(float[3] c) {
         .pos = c
@@ -135,17 +133,24 @@ struct OBox3 {
     float[3] rad // half width
     mat4 matrix
 
+    vec4 getCenter() return vec4(.pos[0], .pos[1], .pos[2], 0)
+
     this(vec4 p, vec4 r, mat4 m) {
         .pos = [p.x(), p.y(), p.z()]
-        .rad = [r.x(), r.y(), r.z()]
+        .rad = [r.x() / 2.0f, r.y() / 2.0f, r.z() / 2.0f]
         .matrix = m
     }
 
     // check a single axis
     bool isSeperatingAxis(OBox3 o, vec4 axis, vec4 diff) {
+        float EPSILON = 0.00005 //close enough
+        axis.v[0] += EPSILON
+        axis.v[1] += EPSILON
+        axis.v[2] += EPSILON
+        axis = axis.normalized()
         float ra = axis.dot(.matrix.x()) * .rad[0] + axis.dot(.matrix.y()) * .rad[1] + axis.dot(.matrix.z()) * .rad[2]
         float rb = axis.dot(o.matrix.x()) * o.rad[0] + axis.dot(o.matrix.y()) * o.rad[1] + axis.dot(o.matrix.z()) * o.rad[2]
-        return diff.dot(axis) > ra + rb
+        return fabs(diff.dot(axis)) > fabs(ra) + fabs(rb)
     }
 
     bool collides(OBox3 o) {
@@ -154,7 +159,6 @@ struct OBox3 {
         vec4 diff = vec4(.pos[0] - o.pos[0], .pos[1] - o.pos[1], .pos[2] - o.pos[2], 0)
         vec4 tmp
         vec4 axis
-        float EPSILON = 0.00005 //close enough
         float ra
         float rb
 
@@ -162,72 +166,70 @@ struct OBox3 {
         axis = .matrix.x()
         ra = .rad[0]
         rb = axis.dot(o.matrix.x()) * o.rad[0] + axis.dot(o.matrix.y()) * o.rad[1] + axis.dot(o.matrix.z()) * o.rad[2]
-        if(diff.dot(axis) > ra + rb) return false
+        if(fabs(diff.dot(axis)) > ra + fabs(rb)) return false
 
         axis = .matrix.y()
         ra = .rad[1]
         rb = axis.dot(o.matrix.x()) * o.rad[0] + axis.dot(o.matrix.y()) * o.rad[1] + axis.dot(o.matrix.z()) * o.rad[2]
-        if(diff.dot(axis) > ra + rb) return false
+        if(fabs(diff.dot(axis)) > ra + fabs(rb)) return false
 
         axis = .matrix.z()
         ra = .rad[2]
         rb = axis.dot(o.matrix.x()) * o.rad[0] + axis.dot(o.matrix.y()) * o.rad[1] + axis.dot(o.matrix.z()) * o.rad[2]
-        if(diff.dot(axis) > ra + rb) return false
-
-
+        if(fabs(diff.dot(axis)) > ra + fabs(rb)) return false
 
         // o's axes
         axis = o.matrix.x()
         ra = o.rad[0]
         rb = axis.dot(.matrix.x()) * .rad[0] + axis.dot(.matrix.y()) * .rad[1] + axis.dot(.matrix.z()) * .rad[2]
-        if(diff.dot(axis) > ra + rb) return false
+        if(fabs(diff.dot(axis)) > ra + fabs(rb)) return false
 
         axis = o.matrix.y()
         ra = o.rad[1]
         rb = axis.dot(.matrix.x()) * .rad[0] + axis.dot(.matrix.y()) * .rad[1] + axis.dot(.matrix.z()) * .rad[2]
-        if(diff.dot(axis) > ra + rb) return false
+        if(fabs(diff.dot(axis)) > ra + fabs(rb)) return false
 
         axis = o.matrix.z()
         ra = o.rad[2]
         rb = axis.dot(.matrix.x()) * .rad[0] + axis.dot(.matrix.y()) * .rad[1] + axis.dot(.matrix.z()) * .rad[2]
-        if(diff.dot(axis) > ra + rb) return false
+        if(fabs(diff.dot(axis)) > ra + fabs(rb)) return false
 
         //edge axes
         tmp = .matrix.x()
         axis = tmp.cross(o.matrix.x())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
-
+        if(.isSeperatingAxis(o, axis, diff)) return false
+        
         tmp = .matrix.y()
         axis = tmp.cross(o.matrix.x())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.z()
         axis = tmp.cross(o.matrix.x())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.x()
         axis = tmp.cross(o.matrix.y())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.y()
         axis = tmp.cross(o.matrix.y())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.z()
         axis = tmp.cross(o.matrix.y())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.x()
         axis = tmp.cross(o.matrix.z())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.y()
         axis = tmp.cross(o.matrix.z())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         tmp = .matrix.z()
         axis = tmp.cross(o.matrix.z())
-        if(.isSeperatingAxis(o, axis, diff)) return false;
+        if(.isSeperatingAxis(o, axis, diff)) return false
 
         // no seperating axis found
         return true

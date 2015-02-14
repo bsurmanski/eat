@@ -55,10 +55,6 @@ class DuckMan : Entity {
         .position = vec4(0, 0, 0, 1)
     }
 
-    Box3 getHitbox() { 
-        return Box3(.position, .getExtents())
-    }
-
     vec4 getExtents() {
         vec4 dim = vec4(1.8, 2.5, 1.8, 0)
         return dim.mul(.scale)
@@ -106,6 +102,7 @@ class DuckMan : Entity {
 
     void rotate(float f) {
         .rotation += f
+        .qrotation = vec4.createQuaternion(.rotation, vec4(0, 1, 0, 0))
     }
 
     void step() {
@@ -139,7 +136,7 @@ class DuckMan : Entity {
 
         dev.runMeshProgram(.getMesh(), .getTexture(), mat)
 
-        if(dev.drawHitbox) dev.drawBoundingBox(.getHitbox(), view)
+        if(dev.drawHitbox) dev.drawOBoundingBox(.getHitbox(), view)
     }
 
     GLMesh getMesh() return mesh

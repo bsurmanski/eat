@@ -54,7 +54,7 @@ class Mouse : Entity {
         }
 
         DuckMan d = DuckMan.getInstance()
-        Box3 dhit = d.getHitbox()
+        OBox3 dhit = d.getHitbox()
         if(dhit.collides(.getHitbox())) {
             if(d.scale * 2.2 > 1.6) {
                 d.eat(this)

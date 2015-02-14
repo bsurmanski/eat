@@ -76,7 +76,7 @@ class GirlDuck : Entity {
         }
 
         DuckMan d = DuckMan.getInstance()
-        Box3 dhit = d.getHitbox()
+        OBox3 dhit = d.getHitbox()
         if(dhit.collides(.getHitbox())) {
             if(d.scale > .scale) {
                 d.eat(this)

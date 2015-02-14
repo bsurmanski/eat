@@ -165,6 +165,41 @@ class GLDrawDevice {
         GLPPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     }
 
+    void drawOBoundingBox(OBox3 box, mat4 view) {
+        static GLProgram program 
+
+        .mainBuffer.bind()
+        GLPViewport(0, 0, .w/4, .h/4)
+
+        if(!program) {
+            program = new GLProgram(pack "glsl/mesh.vs", pack "glsl/mesh.fs")
+        }
+
+        program.bind()
+        .white.bind()
+        .cube.bind()
+
+        .bindStandardAttributes(program)
+
+        GLPUniform1i(GLPGetUniformLocation(program.program, "t_color"), 0)
+
+        mat4 matrix = mat4()
+        matrix = matrix.scale(box.rad[0], box.rad[1], box.rad[2])
+        matrix = matrix.mul(box.matrix)
+        matrix = matrix.translate(box.getCenter())
+
+        matrix = view.mul(matrix)
+
+        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
+        matrix = persp.mul(matrix)
+
+        GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
+
+        GLPPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+        .cube.draw()
+        GLPPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
+    }
+
     void runSimpleProgram(GLMesh mesh, GLTexture tex, mat4 mat) {
         GLPBindFramebuffer(GL_FRAMEBUFFER, 0)
         GLPViewport(0, 0, .w, .h)
