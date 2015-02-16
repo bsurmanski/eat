@@ -106,7 +106,7 @@ class GLDrawDevice {
     }
 
     void runMeshProgram(GLMesh mesh, GLTexture tex, mat4 matrix) {
-        static GLProgram program 
+        static GLProgram program = null
 
         .mainBuffer.bind()
         GLPViewport(0, 0, .w/4, .h/4)
@@ -117,7 +117,12 @@ class GLDrawDevice {
 
         program.bind()
         mesh.bind()
-        if(tex) tex.bind()
+        if(tex) {
+            tex.bind()
+        }
+        else {
+            printf("NO TEX\n")
+        }
 
         .bindStandardAttributes(program)
 

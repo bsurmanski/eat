@@ -4,6 +4,9 @@ import "libwl/collision.wl"
 import "drawDevice.wl"
 
 class Entity {
+    GLMesh someMesh
+    GLTexture someTexture
+
     vec4 position
     vec4 qrotation
     float rotation
@@ -44,8 +47,8 @@ class Entity {
     void update(float dt) {
     }
 
-    GLMesh getMesh() return null
-    GLTexture getTexture() return null
+    GLMesh getMesh() return .someMesh
+    GLTexture getTexture() return .someTexture 
     float getScale() return 1.0f
 
     vec4 getExtents() {
@@ -76,7 +79,6 @@ class Entity {
         mat = view.mul(mat)
 
         dev.runMeshProgram(.getMesh(), .getTexture(), mat)
-
 
         if(dev.drawHitbox) dev.drawOBoundingBox(.getHitbox(), view)
     }

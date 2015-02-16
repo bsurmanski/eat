@@ -80,6 +80,10 @@ class GLTexture {
         .kind = RGBA8
     }
 
+    ~this() {
+        printf("releasing texture\n")
+    }
+
     // XXX workaround. function overloading on constructor not done yet
     static GLTexture create(int w, int h, int kind) {
         int format = GL_RGBA

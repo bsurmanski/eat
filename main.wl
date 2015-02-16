@@ -26,6 +26,7 @@ import "shroom.wl"
 
 import "drawDevice.wl"
 
+import "content.wl"
 import "scene.wl"
 import "man.wl"
 import "title.wl"
@@ -40,7 +41,6 @@ const int WIN = 3
 const int LOSE = 4
 bool running = true
 GLDrawDevice glDevice
-GLTexture tex
 
 int whereAreWe= 0
 
@@ -65,27 +65,40 @@ int HEIGHT = 720
 void init() {
     SDLWindow window = new SDLWindow(WIDTH, HEIGHT, "Who Ate Cookies?")
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048)
-    Image i = loadTGA(new StringFile(pack "res/test.tga"))
-    tex = new GLTexture(i)
     glDevice = new GLDrawDevice(WIDTH, HEIGHT)
-    man = new DuckMan()
-    title = new Title()
 
-    i = loadTGA(new StringFile(pack "res/instructions.tga"))
-    instructions = new GLTexture(i)
-    i = loadTGA(new StringFile(pack "res/win.tga"))
-    win = new GLTexture(i)
-    i = loadTGA(new StringFile(pack "res/lose.tga"))
-    lose = new GLTexture(i)
-
-    loadScene(new StringFile(pack "mouse.scn"))
 
     musicInit()
 
-    i = loadTGA(new StringFile(pack "res/house_inside.tga"))
-    house_inside_tex = new GLTexture(i)
-    Mesh m = loadMdl(new StringFile(pack "res/house_inside.mdl"))
-    house_inside_mesh = new GLMesh(m)
+
+    Content content = Content.getInstance()
+    instructions = content.addTexture("instructions", new StringFile(pack "res/instructions.tga"))
+    win = content.addTexture("win", new StringFile(pack "res/win.tga"))
+    lose = content.addTexture("lose", new StringFile(pack "res/lose.tga"))
+    content.addTexture("title", new StringFile(pack "res/title.tga"))
+    content.addTexture("house_inside", new StringFile(pack "res/house_inside.tga"))
+    content.addMesh("mouse", new StringFile(pack "res/mouse.mdl"))
+    content.addTexture("mouse", new StringFile(pack "res/mouse.tga"))
+
+    house_inside_tex = content.getTexture("house_inside")
+    house_inside_mesh = content.addMesh("house_inside", new StringFile(pack "res/house_inside.mdl"))
+
+    content.addMesh("jar", new StringFile(pack "res/jar.mdl"))
+    content.addTexture("jam", new StringFile(pack "res/jam.tga"))
+
+    content.addMesh("sidetable", new StringFile(pack "res/sidetable.mdl"))
+    content.addTexture("sidetable", new StringFile(pack "res/sidetable.tga"))
+
+    content.addMesh("tulip", new StringFile(pack "res/tulip.mdl"))
+    content.addTexture("tulip", new StringFile(pack "res/tulip.tga"))
+
+    content.addMesh("flowerpot", new StringFile(pack "res/flowerpot.mdl"))
+    content.addTexture("flowerpot", new StringFile(pack "res/flowerpot.tga"))
+
+    loadScene(new StringFile(pack "res/scene/table_test.scn"))
+
+    man = new DuckMan()
+    title = new Title()
 }
 
 void input() {
@@ -119,12 +132,14 @@ void input() {
         if(keystate[SDLK_SPACE] and !SPACE_DOWN) {
             whereAreWe = GAME
             // this is here so that music messes with random seed
+            /*
             initMice()
             initGrubs()
             initCrumbs()
             initCarrots()
             initCliffbars()
             Entity.add(new GirlDuck())
+            */
             //(Entity.add(new Shroom()))
         }
     } else if(whereAreWe == GAME) {
@@ -229,7 +244,6 @@ void draw_house() {
 void draw() {
     glDevice.clearBuffer()
     glDevice.clear()
-    tex.bind()
     if(whereAreWe == TITLE) {
         title.draw()
     } else if(whereAreWe == INSTRUCTIONS) {
