@@ -26,6 +26,8 @@ class Cliffbar : Entity {
     float yummyNummies() return 10.0f
     float nummies() return 0.1
 
+    vec4 getScale() return vec4(1, 1, 1, 1)
+
     this() {
         .qrotation = vec4(0,0,0,1)
 

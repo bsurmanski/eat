@@ -32,6 +32,7 @@ class Title {
         mat4 view = mat4()
         view = view.translate(vec4(0, 0, -5, 0))
         .cookie.draw(view)
+        dev.drawQuad()
     }
 
 }

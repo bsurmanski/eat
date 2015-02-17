@@ -100,7 +100,7 @@ class Grub : Entity {
         return dim
     }
 
-    float getScale() return .scale
+    vec4 getScale() return vec4(.scale, .scale, .scale, 1)
     GLMesh getMesh() return .mesh
     GLTexture getTexture() return .texture
 }

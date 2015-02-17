@@ -42,6 +42,8 @@ class Crumb : Entity {
         .position.v[2] = randomFloat() * 18.0f - 9.0f
     }
 
+    vec4 getScale() return vec4(1, 1, 1, 1)
+
     void update(float dt) {
         DuckMan d = DuckMan.getInstance()
         OBox3 dhit = d.getHitbox()

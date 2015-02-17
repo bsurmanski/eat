@@ -18,6 +18,7 @@ class Cookie : Entity {
     static GLTexture texture
     float tick
     bool dead
+    bool clean
 
     bool isDead() return .dead
     bool areYouCookie() return true
@@ -38,6 +39,8 @@ class Cookie : Entity {
             .texture = new GLTexture(i)
         }
     }
+
+    vec4 getScale() return vec4(1, 1, 1, 1)
 
     void update(float dt) {
         .tick += dt
@@ -64,6 +67,8 @@ class Cookie : Entity {
 
         if(dev.crazy) {
             dev.runMeshProgram(.monkey, .texture, mat)
+        } else if(.clean) {
+            dev.runCleanMeshProgram(.mesh, .texture, mat)
         } else {
             dev.runMeshProgram(.mesh, .texture, mat)
         }

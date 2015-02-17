@@ -25,6 +25,7 @@ class Mouse : Entity {
 
     this() {
         .qrotation = vec4(0,0,0,1)
+        .scale = vec4(1, 1, 1, 1)
 
         .spin = 1
         if(!mesh) {
@@ -43,6 +44,7 @@ class Mouse : Entity {
     }
 
     float nummies() return 0.15
+    vec4 getScale() return vec4(1, 1, 1, 1)
 
     bool isDead() return .dead
 

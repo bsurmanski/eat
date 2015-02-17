@@ -67,9 +67,7 @@ void init() {
     Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 2048)
     glDevice = new GLDrawDevice(WIDTH, HEIGHT)
 
-
     musicInit()
-
 
     Content content = Content.getInstance()
     instructions = content.addTexture("instructions", new StringFile(pack "res/instructions.tga"))
@@ -95,7 +93,16 @@ void init() {
     content.addMesh("flowerpot", new StringFile(pack "res/flowerpot.mdl"))
     content.addTexture("flowerpot", new StringFile(pack "res/flowerpot.tga"))
 
-    loadScene(new StringFile(pack "res/scene/table_test.scn"))
+    content.addMesh("toast", new StringFile(pack "res/toast.mdl"))
+    content.addTexture("toast", new StringFile(pack "res/toast.tga"))
+
+    content.addMesh("toaster", new StringFile(pack "res/toaster.mdl"))
+    content.addTexture("toaster", new StringFile(pack "res/toaster.tga"))
+
+    content.addMesh("counter", new StringFile(pack "res/counter.mdl"))
+    content.addTexture("counter", new StringFile(pack "res/counter.tga"))
+
+    loadScene(new StringFile(pack "res/table_test.scn"))
 
     man = new DuckMan()
     title = new Title()
@@ -132,14 +139,13 @@ void input() {
         if(keystate[SDLK_SPACE] and !SPACE_DOWN) {
             whereAreWe = GAME
             // this is here so that music messes with random seed
-            /*
+            
             initMice()
             initGrubs()
             initCrumbs()
             initCarrots()
             initCliffbars()
             Entity.add(new GirlDuck())
-            */
             //(Entity.add(new Shroom()))
         }
     } else if(whereAreWe == GAME) {
@@ -248,23 +254,24 @@ void draw() {
         title.draw()
     } else if(whereAreWe == INSTRUCTIONS) {
         glDevice.runTitleProgram(glDevice.getQuad(), instructions, mat4())
+        glDevice.drawQuad()
     } else if(whereAreWe == GAME) {
         draw_house()
         man.draw(view)
 
         drawEntities(view)
 
+        glDevice.drawQuad()
         if(cookie) {
             cookie.draw(view)
         }
     } else if(whereAreWe == WIN) {
         glDevice.runTitleProgram(glDevice.getQuad(), win, mat4())
+        glDevice.drawQuad()
     } else if(whereAreWe == LOSE) {
         glDevice.runTitleProgram(glDevice.getQuad(), lose, mat4())
+        glDevice.drawQuad()
     }
-
-    glDevice.drawQuad()
-
 
     SDL_GL_SwapBuffers()
 }

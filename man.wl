@@ -60,6 +60,8 @@ class DuckMan : Entity {
         return dim.mul(.scale)
     }
 
+    vec4 getScale() return vec4(.scale, .scale, .scale, 1)
+
     void eat(Entity e) {
         Mix_PlayChannelTimed(-1, .munch, 0, -1)
         .scale += e.nummies()
@@ -120,17 +122,15 @@ class DuckMan : Entity {
         .moved = true
     }
 
-    float getScale() return .scale
-
     void draw(mat4 view) {
         GLDrawDevice dev = GLDrawDevice.getInstance()
 
-        float scale = .getScale()
+        vec4 scale = .getScale()
 
         mat4 mat = mat4()
         vec4 axis = vec4(0, 1, 0, 0)
         mat = mat.rotate(.rotation, axis)
-        mat = mat.scale(scale, scale, scale)
+        mat = mat.scale(scale.x(), scale.y(), scale.z())
         mat = mat.translate(.position)
         mat = view.mul(mat)
 

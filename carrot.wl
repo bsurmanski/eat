@@ -22,6 +22,11 @@ class Carrot : Entity {
     bool dead
     
     bool isDead() return .dead
+    vec4 getScale() return vec4(1, 1, 1, 1)
+    float nummies() return 0.15
+    GLMesh getMesh() return mesh
+    GLTexture getTexture() return texture
+    vec4 getExtents() return vec4(1.0, 0.98, 0.86, 0)
 
     this() {
         .qrotation = vec4(0,0,0,1)
@@ -51,13 +56,6 @@ class Carrot : Entity {
             }
         }
     }
-
-    float nummies() return 0.15
-
-    GLMesh getMesh() return mesh
-    GLTexture getTexture() return texture
-
-    vec4 getExtents() return vec4(1.0, 0.98, 0.86, 0)
 }
 
 void initCarrots() {

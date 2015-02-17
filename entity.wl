@@ -9,6 +9,7 @@ class Entity {
 
     vec4 position
     vec4 qrotation
+    vec4 scale
     float rotation
 
     static Entity first
@@ -22,6 +23,7 @@ class Entity {
 
     this() {
         .qrotation = vec4(0,0,0,1)
+        .scale = vec4(1, 1, 1, 1)
     }
 
     static void add(Entity e) {
@@ -49,7 +51,7 @@ class Entity {
 
     GLMesh getMesh() return .someMesh
     GLTexture getTexture() return .someTexture 
-    float getScale() return 1.0f
+    vec4 getScale() return .scale
 
     vec4 getExtents() {
         return vec4(1, 1, 1, 0)
@@ -67,13 +69,12 @@ class Entity {
     void draw(mat4 view) {
         GLDrawDevice dev = GLDrawDevice.getInstance()
 
-        float scale = .getScale()
-
         mat4 mat = mat4()
         mat4 qmat = .qrotation.toMatrix()
         vec4 axis = vec4(0, 1, 0, 0)
-        //mat = mat.rotate(.rotation, axis)
-        mat = mat.scale(scale, scale, scale)
+        //mat = mat.scale(scale, scale, scale)
+        vec4 scale = .getScale()
+        mat = mat.scale(scale.x(), scale.y(), scale.z())
         mat = qmat.mul(mat)
         mat = mat.translate(.position)
         mat = view.mul(mat)

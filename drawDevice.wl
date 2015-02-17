@@ -120,8 +120,34 @@ class GLDrawDevice {
         if(tex) {
             tex.bind()
         }
-        else {
-            printf("NO TEX\n")
+
+        .bindStandardAttributes(program)
+
+        GLPUniform1i(GLPGetUniformLocation(program.program, "t_color"), 0)
+
+        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
+        mat4 matrix = persp.mul(matrix)
+
+        GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
+
+        mesh.draw()
+    }
+
+    void runCleanMeshProgram(GLMesh mesh, GLTexture tex, mat4 matrix) {
+        GLPBindFramebuffer(GL_FRAMEBUFFER, 0)
+        static GLProgram program = null
+
+        //.mainBuffer.bind()
+        GLPViewport(0, 0, .w, .h)
+
+        if(!program) {
+            program = new GLProgram(pack "glsl/simple.vs", pack "glsl/simple.fs")
+        }
+
+        program.bind()
+        mesh.bind()
+        if(tex) {
+            tex.bind()
         }
 
         .bindStandardAttributes(program)

@@ -55,6 +55,7 @@ class GirlDuck : Entity {
     }
 
     float nummies() return 0.07f
+    vec4 getScale() return vec4(.scale, .scale, .scale, 1)
 
     void update(float dt) {
         static float tick

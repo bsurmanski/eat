@@ -48,7 +48,7 @@ Scene loadScene(InputInterface file) {
         file.read(&ent, SceneEntity.sizeof, 1)
         vec4 position = vec4(ent.position[0], ent.position[1], ent.position[2], 1)
         vec4 rotation = vec4(ent.rotation[0], ent.rotation[1], ent.rotation[2], ent.rotation[3])
-        vec4 scale = vec4(ent.scale[0], ent.scale[1], ent.scale[2], 0)
+        vec4 scale = vec4(ent.scale[0], ent.scale[1], ent.scale[2], 1)
 
         if(!strcmp("Mouse".ptr, ent.name.ptr)) {
             Mouse m = new Mouse()
@@ -72,11 +72,22 @@ Scene loadScene(InputInterface file) {
             } else if(!strcmp("Tulip".ptr, ent.name.ptr)) {
                 e.someMesh = content.getMesh("tulip")
                 e.someTexture = content.getTexture("tulip")
+            }
+            else if(!strcmp("toast".ptr, ent.name.ptr)) {
+                e.someMesh = content.getMesh("toast")
+                e.someTexture = content.getTexture("toast")
+            } else if(!strcmp("toaster".ptr, ent.name.ptr)) {
+                e.someMesh = content.getMesh("toaster")
+                e.someTexture = content.getTexture("toaster")
+            } else if(!strcmp("counter".ptr, ent.name.ptr)) {
+                e.someMesh = content.getMesh("counter")
+                e.someTexture = content.getTexture("counter")
             } else {
                 continue
             }
             e.position = position
             e.qrotation = rotation
+            e.scale = scale
             Entity.add(e)
         }
     }
