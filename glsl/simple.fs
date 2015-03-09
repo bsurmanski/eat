@@ -20,7 +20,8 @@ void main(void) {
     float texcox = -xxxx+1.0f;
 
     if(crazy) {
-        color = texture2D(tex, vec2(texco.x + texcox * sin(tick*PI*16 + texco.y*16)/100, texco.y));
+        vec2 ctexco = vec2(texco.x + texcox * sin(tick*PI*16 + texco.y*16)/100, texco.y);
+        color = texture2D(tex, ctexco);
         color.r = color.g + color.b;
         color.g = sin(tick * 23) * color.r + sin(tick * 5) * color.g + sin(tick * 11) * color.b;
 
@@ -29,8 +30,13 @@ void main(void) {
     } else if(boring) {
         color = texture2D(tex, texco);
     } else {
-        color = texture2D(tex, 
-            vec2(texco.x + texcox * sin(tick*20 + texco.y*20)/100, texco.y));
+        vec2 ctexco = vec2(texco.x + texcox * sin(tick*10 + texco.y*15)/100, texco.y);
+        color = texture2D(tex, ctexco);
+    }
+
+    float EPSILON = 0.01f;
+    if(color.a <= EPSILON) {
+        discard;
     }
 
 

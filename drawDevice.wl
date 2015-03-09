@@ -16,6 +16,8 @@ class GLDrawDevice {
     static GLTexture white
     static GLDrawDevice instance
 
+    mat4 persp
+
     int w
     int h
     float tick
@@ -54,6 +56,10 @@ class GLDrawDevice {
 
         .w = w
         .h = h
+
+        float ratio = .w / .h
+
+        .persp = getFrustumMatrix(ratio * -0.1f, ratio * 0.1f, -0.1f, 0.1f, 0.1f, 10000)
 
         .mainBuffer = new GLFramebuffer()
         .colorTexture = GLTexture.create(w/4, h/4, 0) // 0 = RGBA8
@@ -125,8 +131,7 @@ class GLDrawDevice {
 
         GLPUniform1i(GLPGetUniformLocation(program.program, "t_color"), 0)
 
-        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
-        mat4 matrix = persp.mul(matrix)
+        mat4 matrix = .persp.mul(matrix)
 
         GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
 
@@ -137,6 +142,9 @@ class GLDrawDevice {
         GLPBindFramebuffer(GL_FRAMEBUFFER, 0)
         static GLProgram program = null
 
+        GLPBindFramebuffer(GL_READ_FRAMEBUFFER, .mainBuffer.id)
+        GLPBindFramebuffer(GL_FRAMEBUFFER, 0)
+        GLPBlitFramebuffer(0, 0, .w/4, .h/4, 0, 0, .w, .h, GL_DEPTH_BUFFER_BIT, GL_NEAREST)
         //.mainBuffer.bind()
         GLPViewport(0, 0, .w, .h)
 
@@ -154,8 +162,7 @@ class GLDrawDevice {
 
         GLPUniform1i(GLPGetUniformLocation(program.program, "t_color"), 0)
 
-        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
-        mat4 matrix = persp.mul(matrix)
+        mat4 matrix = .persp.mul(matrix)
 
         GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
 
@@ -186,8 +193,7 @@ class GLDrawDevice {
 
         matrix = view.mul(matrix)
 
-        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
-        matrix = persp.mul(matrix)
+        matrix = .persp.mul(matrix)
 
         GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
 
@@ -221,8 +227,7 @@ class GLDrawDevice {
 
         matrix = view.mul(matrix)
 
-        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
-        matrix = persp.mul(matrix)
+        matrix = .persp.mul(matrix)
 
         GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
 
@@ -251,8 +256,7 @@ class GLDrawDevice {
         GLPUniform1i(GLPGetUniformLocation(program.program, "crazy"), .crazy)
         GLPUniform1i(GLPGetUniformLocation(program.program, "boring"), .boring)
 
-        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
-        mat4 matrix = persp.mul(mat)
+        mat4 matrix = .persp.mul(mat)
 
         GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
         GLPUniform1f(GLPGetUniformLocation(program.program, "tick"), .tick)
@@ -280,8 +284,7 @@ class GLDrawDevice {
         GLPUniform1i(GLPGetUniformLocation(program.program, "tex"), 0)
         GLPUniform1i(GLPGetUniformLocation(program.program, "crazy"), .crazy)
 
-        mat4 persp = getFrustumMatrix(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 10000)
-        mat4 matrix = persp.mul(mat)
+        mat4 matrix = .persp.mul(mat)
 
         GLPUniformMatrix4fv(GLPGetUniformLocation(program.program, "matrix"), 1, GL_TRUE, matrix.ptr())
         GLPUniform1f(GLPGetUniformLocation(program.program, "tick"), .tick)
@@ -296,6 +299,8 @@ class GLDrawDevice {
     void clearBuffer() {
         static int err
         if(!err) {
+            // print out first OpenGL error found in application
+            // ideally, this never gets called.
             err = GLPGetError()
             if(err) printf("GLERROR: %d\n", err)
         }

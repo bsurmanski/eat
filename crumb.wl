@@ -22,8 +22,8 @@ class Crumb : Entity {
     bool dead
     
     bool isDead() return .dead
-
     float nummies() return 0.005
+    bool isSpecial() return true
 
     this() {
         .qrotation = vec4(0,0,0,1)

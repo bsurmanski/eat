@@ -1,6 +1,7 @@
 import "libwl/file.wl"
 import "libwl/vec.wl"
 import "entity.wl"
+import "prop.wl"
 import "content.wl"
 import "mouse.wl"
 
@@ -59,7 +60,7 @@ Scene loadScene(InputInterface file) {
         } else if(!strcmp("Lamp".ptr, ent.name.ptr)) {
         } else {
             Content content = Content.getInstance()
-            Entity e = new Entity()
+            Entity e = new Prop()
             if(!strcmp("sidetable".ptr, ent.name.ptr)) {
                 e.someMesh = content.getMesh("sidetable")
                 e.someTexture = content.getTexture("sidetable")
@@ -82,6 +83,16 @@ Scene loadScene(InputInterface file) {
             } else if(!strcmp("counter".ptr, ent.name.ptr)) {
                 e.someMesh = content.getMesh("counter")
                 e.someTexture = content.getTexture("counter")
+            } else if(!strcmp("tv".ptr, ent.name.ptr)) {
+                e.someMesh = content.getMesh("tv")
+                e.someTexture = content.getTexture("tv")
+            } else if(!strcmp("tv_cabinent".ptr, ent.name.ptr)) {
+                e.someMesh = content.getMesh("tv_cabinent")
+                e.someTexture = content.getTexture("tv_cabinent")
+            } else if(!strcmp("couch".ptr, ent.name.ptr)) {
+                e.someMesh = content.getMesh("couch")
+                e.someTexture = content.getTexture("couch")
+                e.collider = content.getCollider("couch")
             } else {
                 continue
             }

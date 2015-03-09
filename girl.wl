@@ -9,6 +9,7 @@ import "libwl/file.wl"
 import "libwl/random.wl"
 import "libwl/collision.wl"
 import "drawDevice.wl"
+import "content.wl"
 
 import "man.wl"
 
@@ -36,15 +37,9 @@ class GirlDuck : Entity {
 
         .scale = 1.5f
         .spin = 1
-        if(!mesh) {
-            Mesh m = loadMdl(new StringFile(pack "res/pillduck.mdl"))
-            .mesh = new GLMesh(m)
-        }
-
-        if(!texture) {
-            Image i = loadTGA(new StringFile(pack "res/girlduck.tga"))
-            .texture = new GLTexture(i)
-        }
+        Content content = Content.getInstance()
+        .mesh = content.getMesh("pillduck")
+        .texture = content.getTexture("girlduck")
 
         if(!girlDead)
             girlDead = Mix_LoadWAV_RW(SDL_RWFromFile("res/girldead.wav", "rb"), 1)

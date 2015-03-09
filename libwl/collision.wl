@@ -234,6 +234,10 @@ struct OBox3 {
         // no seperating axis found
         return true
     }
+
+    void print() {
+        printf("%f %f %f; %f %f %f\n", .pos[0], .pos[1], .pos[2], .rad[0], .rad[1], .rad[2])
+    }
 }
 
 struct Ball2 {

@@ -4,6 +4,7 @@ import "libwl/image.wl"
 import "libwl/fmt/tga.wl"
 import "libwl/fmt/mdl.wl"
 import "libwl/file.wl"
+import "collider.wl"
 
 undecorated int strcmp(char^ s1, char^ s2);
 
@@ -39,11 +40,28 @@ class TextureNode {
     }
 }
 
+class ColliderNode {
+    char[] name
+    Collider collider 
+    
+    ColliderNode next
+
+    this(char[] name, Collider c) {
+        .name = name
+        .collider = c
+    }
+
+    ~this() {
+        printf("delete content physics node\n")
+    }
+}
+
 class Content {
     static Content instance
 
     MeshNode meshList
     TextureNode textureList
+    ColliderNode colliderList
 
     this() {
     }
@@ -78,6 +96,14 @@ class Content {
         return texture 
     }
 
+    Collider addCollider(char[] name, InputInterface colliderInput) {
+        Collider collider = loadCollider(colliderInput)
+        ColliderNode node = new ColliderNode(name, collider)
+        if(.colliderList) node.next = .colliderList
+        .colliderList = node
+        return collider
+    }
+
     GLMesh getMesh(char[] name) {
         MeshNode it = .meshList
 
@@ -100,6 +126,21 @@ class Content {
             if(name.size == it.name.size) {
                 if(strcmp(name.ptr, it.name.ptr) == 0) {
                     return it.texture
+                }
+            }
+            it = it.next
+        }
+
+        return null
+    }
+
+    Collider getCollider(char[] name) {
+        ColliderNode it = .colliderList
+
+        while(it) {
+            if(name.size == it.name.size) {
+                if(strcmp(name.ptr, it.name.ptr) == 0) {
+                    return it.collider
                 }
             }
             it = it.next

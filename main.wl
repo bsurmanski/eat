@@ -102,7 +102,22 @@ void init() {
     content.addMesh("counter", new StringFile(pack "res/counter.mdl"))
     content.addTexture("counter", new StringFile(pack "res/counter.tga"))
 
-    loadScene(new StringFile(pack "res/table_test.scn"))
+    content.addMesh("tv", new StringFile(pack "res/tv.mdl"))
+    content.addTexture("tv", new StringFile(pack "res/tv.tga"))
+
+    content.addMesh("tv_cabinent", new StringFile(pack "res/tv_cabinent.mdl"))
+    content.addTexture("tv_cabinent", new StringFile(pack "res/tv_cabinent.tga"))
+
+    content.addMesh("couch", new StringFile(pack "res/couch.mdl"))
+    content.addTexture("couch", new StringFile(pack "res/couch.tga"))
+    content.addCollider("couch", new StringFile(pack "res/couch.phy"))
+
+    content.addMesh("pillduck", new StringFile(pack "res/pillduck.mdl"))
+    content.addTexture("pillduck", new StringFile(pack "res/pillduck.tga"))
+    content.addTexture("girlduck", new StringFile(pack "res/girlduck.tga"))
+    content.addCollider("pillduck", new StringFile(pack "res/pillduck.phy"))
+
+    loadScene(new StringFile(pack "res/house.scn"))
 
     man = new DuckMan()
     title = new Title()
@@ -229,9 +244,9 @@ void update(float dt) {
 
         view = mat4()
         view = view.translate(vec4(-man.position.v[0], 
-                                -6.0f * man.scale - 1, 
-                                -8.0f * man.scale - man.position.v[2] - 1, 0))
-        view = view.rotate(0.5, vec4(1, 0, 0, 0))
+                                -10.0f * man.scale, 
+                                -14.0f * man.scale - man.position.v[2] - 0, 0))
+        view = view.rotate(0.25, vec4(1, 0, 0, 0))
     }
 
     if(!man.isDead()) {
